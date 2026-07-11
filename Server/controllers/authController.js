@@ -1,43 +1,22 @@
-import User from "../models/User.js";
-import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
+import { loginUser, getUserProfile } from "../services/authService.js";
 
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check required fields
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Email and password are required",
+        message: "Email and Password are required",
       });
     }
 
-    // Find user
-    const user = await User.findOne({ email });
+    const user = await loginUser(email, password);
 
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password",
-      });
-    }
-
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password",
-      });
-    }
-
-    // Generate JWT
     const token = generateToken(user._id, user.role);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Login Successful",
       token,
@@ -49,11 +28,25 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
+    return res.status(401).json({
       success: false,
-      message: "Server Error",
+      message: error.message,
+    });
+  }
+};
+
+export const profile = async (req, res) => {
+  try {
+    const user = await getUserProfile(req.user.id);
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
