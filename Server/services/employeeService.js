@@ -18,3 +18,12 @@ export const createEmployee = async (employeeData) => {
 export const getEmployees = async () => {
   return await Employee.find().sort({ createdAt: -1 });
 };
+export const getEmployeeById = async (id) => {
+  return await Employee.findById(id);
+};
+export const updateEmployee = async (id, employeeData) => {
+  return await Employee.findByIdAndUpdate(id, employeeData, {
+    new: true,
+    runValidators: true,
+  });
+};

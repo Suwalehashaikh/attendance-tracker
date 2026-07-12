@@ -1,7 +1,7 @@
 import express from "express";
 import {
   addEmployee,
-  getAllEmployees,
+  getAllEmployees,getEmployee,editEmployee
 } from "../controllers/employeeController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
@@ -21,5 +21,17 @@ router.get(
   authMiddleware,
   roleMiddleware("admin"),
   getAllEmployees
+);
+router.get(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getEmployee
+);
+router.put(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  editEmployee
 );
 export default router;
