@@ -5,57 +5,42 @@ const employeeSchema = new mongoose.Schema(
     employeeId: {
       type: String,
       unique: true,
-      required: true,
     },
 
     name: {
       type: String,
       required: true,
-      trim: true,
     },
 
     email: {
       type: String,
-      required: true,
       unique: true,
-      lowercase: true,
-      trim: true,
+      required: true,
     },
 
-    phone: {
+    password: {
       type: String,
       required: true,
     },
 
-    designation: {
-      type: String,
-      required: true,
+    phone: String,
+
+    designation: String,
+
+    department: String,
+
+    site: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Site",
     },
 
-    department: {
-      type: String,
-      required: true,
-    },
+    joiningDate: Date,
 
-    joiningDate: {
-      type: Date,
-      required: true,
-    },
+    salary: Number,
 
-    salary: {
-      type: Number,
-      default: 0,
-    },
+    address: String,
 
-    address: {
-      type: String,
-      default: "",
-    },
-
-    emergencyContact: {
-      type: String,
-      default: "",
-    },
+    emergencyContact: String,
 
     profileImage: {
       type: String,
@@ -67,10 +52,16 @@ const employeeSchema = new mongoose.Schema(
       enum: ["active", "inactive"],
       default: "active",
     },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
   }
 );
+const Employee = mongoose.model("Employee", employeeSchema);
 
-export default mongoose.model("Employee", employeeSchema);
+export default Employee;

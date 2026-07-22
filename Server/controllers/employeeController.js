@@ -75,9 +75,12 @@ export const editEmployee = async (req, res) => {
       employee,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  const statusCode =
+    error.message === "Selected site does not exist" ? 404 : 500;
+
+  res.status(statusCode).json({
+    success: false,
+    message: error.message,
+  });
+}
 };

@@ -15,7 +15,7 @@ console.log("✅ Site Routes Loaded");
 router.post(
   "/",
   authMiddleware,
-  
+  roleMiddleware("admin"),
   validateSite,
   addSite
 );
