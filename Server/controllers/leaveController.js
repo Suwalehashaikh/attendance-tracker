@@ -1,7 +1,7 @@
 import {
   applyLeave,
   getMyLeaves,
-  getAllLeaves,
+  getAllLeaves,updateLeaveStatus
 } from "../services/leaveService.js";
 
 // Employee Apply Leave
@@ -52,6 +52,37 @@ export const allLeaves = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+//approve or reject leave
+export const approveRejectLeave = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, adminRemark } = req.body;
+
+    if (!["Approved", "Rejected"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Status must be Approved or Rejected",
+      });
+    }
+
+    const leave = await updateLeaveStatus(
+      id,
+      status,
+      adminRemark
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Leave ${status} successfully`,
+      leave,
+    });
+  } catch (error) {
+    res.status(400).json({
       success: false,
       message: error.message,
     });

@@ -36,3 +36,22 @@ export const getAllLeaves = async () => {
     )
     .sort({ createdAt: -1 });
 };
+
+export const updateLeaveStatus = async (
+  leaveId,
+  status,
+  adminRemark
+) => {
+  const leave = await Leave.findById(leaveId);
+
+  if (!leave) {
+    throw new Error("Leave request not found");
+  }
+
+  leave.status = status;
+  leave.adminRemark = adminRemark || "";
+
+  await leave.save();
+
+  return leave;
+};

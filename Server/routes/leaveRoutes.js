@@ -3,7 +3,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import {
   createLeave,
   myLeaves,
-  allLeaves,
+  allLeaves,approveRejectLeave
 } from "../controllers/leaveController.js";
 
 const router = express.Router();
@@ -15,4 +15,10 @@ router.get("/my-leaves", authMiddleware, myLeaves);
 // Admin
 router.get("/", authMiddleware, allLeaves);
 
+// Approve or Reject Leave Request
+router.patch(
+  "/:id",
+  authMiddleware,
+  approveRejectLeave
+);
 export default router;
