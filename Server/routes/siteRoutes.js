@@ -11,7 +11,7 @@ import roleMiddleware from "../middleware/roleMiddleware.js";
 import { validateSite } from "../validators/siteValidator.js";
 
 const router = express.Router();
-console.log("✅ Site Routes Loaded");
+
 router.post(
   "/",
   authMiddleware,

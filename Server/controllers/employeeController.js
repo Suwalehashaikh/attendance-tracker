@@ -1,6 +1,6 @@
 import {
   createEmployee,
-  getEmployees,getEmployeeById,updateEmployee
+  getEmployees,getEmployeeById,updateEmployee,deleteEmployee
 } from "../services/employeeService.js";
 
 export const addEmployee = async (req, res) => {
@@ -22,11 +22,18 @@ export const addEmployee = async (req, res) => {
 
 export const getAllEmployees = async (req, res) => {
   try {
-    const employees = await getEmployees();
+    const {
+      employees,
+      totalEmployees,
+      currentPage,
+      totalPages,
+    } = await getEmployees(req.query);
 
     res.status(200).json({
       success: true,
-      count: employees.length,
+      count: totalEmployees,
+      currentPage,
+      totalPages,
       employees,
     });
   } catch (error) {
@@ -83,4 +90,20 @@ export const editEmployee = async (req, res) => {
     message: error.message,
   });
 }
+};
+export const removeEmployee = async (req, res) => {
+  try {
+    console.log("ID:", req.params.id); // 👈 Add this
+    await deleteEmployee(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Employee deleted successfully",
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

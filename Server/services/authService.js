@@ -27,13 +27,13 @@ export const loginEmployee = async (email, password) => {
     "site",
     "siteName siteCode city latitude longitude radius"
   );
-console.log("Employee:", employee);
+
   if (!employee) {
     throw new Error("Invalid email or password");
   }
 
   const isMatch = await bcrypt.compare(password, employee.password);
-console.log("Password Match:", isMatch);
+
   if (!isMatch) {
     throw new Error("Invalid email or password");
   }

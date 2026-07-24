@@ -53,7 +53,7 @@ export const myAttendance = async (req, res) => {
 };
 export const getAttendance = async (req, res) => {
   try {
-    const attendance = await getAllAttendance();
+    const attendance = await getAllAttendance(req.query);
 
     res.status(200).json({
       success: true,

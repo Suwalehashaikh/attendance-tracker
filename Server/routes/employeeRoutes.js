@@ -1,11 +1,13 @@
 import express from "express";
 import {
   addEmployee,
-  getAllEmployees,getEmployee,editEmployee
+  getAllEmployees,getEmployee,editEmployee,removeEmployee
 } from "../controllers/employeeController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
 import { validateEmployee } from "../validators/employeeValidator.js";
+
+
 
 const router = express.Router();
 
@@ -33,5 +35,11 @@ router.put(
   authMiddleware,
   roleMiddleware("admin"),
   editEmployee
+);
+router.delete(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  removeEmployee
 );
 export default router;

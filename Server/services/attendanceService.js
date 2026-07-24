@@ -44,7 +44,7 @@ export const checkInEmployee = async (req) => {
     employee.site.longitude
   );
 
-  console.log(`Distance from site: ${distance.toFixed(2)} meters`);
+  
 
   if (distance > employee.site.radius) {
     throw new Error("You are outside the site boundary");
@@ -53,7 +53,6 @@ export const checkInEmployee = async (req) => {
   // ===============================
   // CREATE ATTENDANCE
   // ===============================
-console.log("Attendance User:", req.user);
   const attendance = await Attendance.create({
     employee: employee._id,
     site: employee.site._id,
@@ -140,8 +139,42 @@ export const getMyAttendance = async (employeeId) => {
 
   return attendance;
 };
-export const getAllAttendance = async () => {
-  const attendance = await Attendance.find()
+export const getAllAttendance = async (query) => {
+  const filter = {};
+
+  // Employee Filter
+  if (query.employeeId) {
+    filter.employee = query.employeeId;
+  }
+
+  // Date Filter
+  if (query.date) {
+    const date = new Date(query.date);
+    date.setHours(0, 0, 0, 0);
+
+    filter.date = date;
+  }
+
+  // Month + Year Filter
+  if (query.month && query.year) {
+    const start = new Date(query.year, query.month - 1, 1);
+    const end = new Date(query.year, query.month, 1);
+
+    filter.date = {
+      $gte: start,
+      $lt: end,
+    };
+  }
+
+  // Date Range Filter
+  if (query.from && query.to) {
+    filter.date = {
+      $gte: new Date(query.from),
+      $lte: new Date(query.to),
+    };
+  }
+
+  const attendance = await Attendance.find(filter)
     .populate(
       "employee",
       "employeeId name designation department"

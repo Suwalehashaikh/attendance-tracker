@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import User from "./models/User.js";
+import User from "../models/User";
 
 dotenv.config();
 
@@ -30,9 +30,7 @@ const createAdmin = async () => {
   role: "admin",
   isActive: true,
 });
-    console.log("✅ Admin Created Successfully");
-    console.log("Email    : suwalehashaikh8@gmail.com");
-    console.log("Password : suwaleha");
+    
 
     process.exit(0);
   } catch (error) {

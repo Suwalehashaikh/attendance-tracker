@@ -42,7 +42,7 @@ export const login = async (req, res) => {
   }
 };
 
-// ================= EMPLOYEE LOGIN =================
+// ================= EMPLOYEE / SUPERVISOR LOGIN =================
 
 export const employeeLogin = async (req, res) => {
   try {
@@ -57,7 +57,12 @@ export const employeeLogin = async (req, res) => {
 
     const employee = await loginEmployee(email, password);
 
-    const token = generateToken(employee._id, "employee");
+    // ✅ Dynamic Role + Employee Type
+    const token = generateToken(
+      employee._id,
+      employee.role,
+      "employee"
+    );
 
     res.status(200).json({
       success: true,
@@ -68,6 +73,7 @@ export const employeeLogin = async (req, res) => {
         employeeId: employee.employeeId,
         name: employee.name,
         email: employee.email,
+        role: employee.role,
         designation: employee.designation,
         department: employee.department,
         site: employee.site,

@@ -23,6 +23,13 @@ const employeeSchema = new mongoose.Schema(
       required: true,
     },
 
+    // 👇 NEW FIELD
+    role: {
+      type: String,
+      enum: ["employee", "supervisor"],
+      default: "employee",
+    },
+
     phone: String,
 
     designation: String,
@@ -62,6 +69,7 @@ const employeeSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
 const Employee = mongoose.model("Employee", employeeSchema);
 
 export default Employee;

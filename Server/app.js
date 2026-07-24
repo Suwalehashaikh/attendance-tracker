@@ -7,6 +7,15 @@ import siteRoutes from "./routes/siteRoutes.js"
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js"
 import leaveRoutes from "./routes/leaveRoutes.js";
+import errorMiddleware, { notFound,
+} from "./middleware/errorMiddleware.js";
+import supervisorRoutes from "./routes/supervisorRoutes.js";
+
+
+
+
+
+
 
 const app = express();
 
@@ -14,7 +23,10 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
+
 
 
 //routes
@@ -24,6 +36,8 @@ app.use("/api/v1/sites", siteRoutes);
 app.use("/api/v1/attendance", attendanceRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 app.use("/api/v1/leave", leaveRoutes);
+app.use("/api/v1/supervisor", supervisorRoutes);
+
 
 app.get("/", (req, res) => {
   res.json({
@@ -31,5 +45,10 @@ app.get("/", (req, res) => {
     message: "Construction Attendance API Running"
   });
 });
+
+//middleware
+app.use(notFound);
+
+app.use(errorMiddleware);
 
 export default app;

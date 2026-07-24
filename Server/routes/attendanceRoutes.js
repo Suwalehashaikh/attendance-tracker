@@ -1,7 +1,9 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 import {
-  validateCheckIn,validateCheckOut
+  validateCheckIn,
+  validateCheckOut,
 } from "../validators/attendanceValidator.js";
 import {
   checkIn,
@@ -12,12 +14,39 @@ import {
 
 const router = express.Router();
 
-router.post("/check-in", authMiddleware, validateCheckIn, checkIn);
+// ================= EMPLOYEE =================
 
-router.post("/check-out", authMiddleware, validateCheckOut, checkOut);
+// Check In
+router.post(
+  "/check-in",
+  authMiddleware,
+  validateCheckIn,
+  checkIn
+);
 
-router.get("/", authMiddleware, getAttendance);
+// Check Out
+router.post(
+  "/check-out",
+  authMiddleware,
+  validateCheckOut,
+  checkOut
+);
 
-router.get("/my-attendance", authMiddleware, myAttendance);
+// My Attendance
+router.get(
+  "/my-attendance",
+  authMiddleware,
+  myAttendance
+);
+
+// ================= ADMIN =================
+
+// All Attendance
+router.get(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getAttendance
+);
 
 export default router;

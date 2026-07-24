@@ -1,24 +1,53 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 import {
   createLeave,
   myLeaves,
-  allLeaves,approveRejectLeave
+  allLeaves,
+  approveRejectLeave,
 } from "../controllers/leaveController.js";
+import { validateLeave } from "../validators/leaveValidator.js";
+
+
+
+
+
 
 const router = express.Router();
 
-// Employee
-router.post("/apply", authMiddleware, createLeave);
-router.get("/my-leaves", authMiddleware, myLeaves);
+// ================= EMPLOYEE =================
 
-// Admin
-router.get("/", authMiddleware, allLeaves);
+// Apply Leave
+router.post(
+  "/apply",
+  authMiddleware,
+  validateLeave,
+  createLeave
+);
+// My Leaves
+router.get(
+  "/my-leaves",
+  authMiddleware,
+  myLeaves
+);
 
-// Approve or Reject Leave Request
+// ================= ADMIN =================
+
+// All Leave Requests
+router.get(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  allLeaves
+);
+
+// Approve / Reject Leave
 router.patch(
   "/:id",
   authMiddleware,
+  roleMiddleware("admin"),
   approveRejectLeave
 );
+
 export default router;
